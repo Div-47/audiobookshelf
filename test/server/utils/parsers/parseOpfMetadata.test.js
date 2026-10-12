@@ -1,8 +1,18 @@
 const chai = require('chai')
 const expect = chai.expect
 const { parseOpfMetadataXML } = require('../../../../server/utils/parsers/parseOpfMetadata')
+const parseOpfMetadata = require('../../../../server/utils/parsers/parseOpfMetadata')
 
 describe('parseOpfMetadata - test series', async () => {
+  it('returns null when the package or metadata element is missing', () => {
+    expect(parseOpfMetadata.parseOpfMetadataJson({})).to.equal(null)
+    expect(parseOpfMetadata.parseOpfMetadataJson({ package: {} })).to.equal(null)
+  })
+
+  it('returns null for malformed XML', async () => {
+    expect(await parseOpfMetadataXML('<package><metadata>')).to.equal(null)
+  })
+
   it('test one series', async () => {
     const opf = `
             <?xml version='1.0' encoding='UTF-8'?>
